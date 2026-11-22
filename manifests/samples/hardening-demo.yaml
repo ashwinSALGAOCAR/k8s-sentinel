@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hardening-demo
+---
+# Deliberately unhardened (no resources, no securityContext) so
+# scripts/verify-hardening.sh has real gaps to detect and patch.
+#
+# Uses nginxinc/nginx-unprivileged, not plain nginx: stock nginx:*-alpine
+# (like manifests/samples/tenant-b.yaml's dashboard/widget) has no non-root
+# USER in its Dockerfile, so forcing runAsNonRoot on it fails the exact way
+# documented in README.md's "Known limitations" (confirmed live against
+# tenant-a/gateway in Phase 4). nginx-unprivileged declares a real non-root
+# UID itself, so this workload clears that specific check.
+#
+# The emptyDir at /tmp is required for a DIFFERENT reason, found the same
+# way: readOnlyRootFilesystem (also part of the baseline) makes nginx fail
+# at startup with `mkdir() "/tmp/proxy_temp" failed (30: Read-only file
+# system)` — this image's nginx.conf writes its temp/cache dirs under /tmp.
+# The hardening tool itself does NOT provision volumes for anyone it
+# hardens (see README's "readOnlyRootFilesystem can break apps that write
+# at runtime" known limitation) — this emptyDir is this fixture's own,
+# pre-existing accommodation, so THIS demo can prove the full
+# apply-and-stay-healthy path without also needing the tool to solve a
+# problem it's documented as deliberately not solving generically.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+  namespace: hardening-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hardening-demo
+  template:
+    metadata:
+      labels:
+        app: hardening-demo
+    spec:
+      containers:
+        - name: app
+          image: nginxinc/nginx-unprivileged:1.27-alpine
+          ports:
+            - containerPort: 8080
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app
+  namespace: hardening-demo
+spec:
+  selector:
+    app: hardening-demo
+  ports:
+    - port: 8080
+      targetPort: 8080

@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tenant-c
+---
+# Bystander in a COMPLETELY different namespace from the isolated pair.
+# Proves the generated policy's "allow to all namespaces except tenant-b"
+# rule actually covers other namespaces, not just the two involved in the
+# isolation request.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: widget
+  namespace: tenant-c
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: widget
+  template:
+    metadata:
+      labels:
+        app: widget
+    spec:
+      containers:
+        - name: widget
+          image: nginx:1.27-alpine
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: widget
+  namespace: tenant-c
+spec:
+  selector:
+    app: widget
+  ports:
+    - port: 80
+      targetPort: 80

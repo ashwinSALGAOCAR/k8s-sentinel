@@ -1,0 +1,74 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: tenant-b
+---
+# This is the workload we isolate gateway from in tests/demos.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dashboard
+  namespace: tenant-b
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dashboard
+  template:
+    metadata:
+      labels:
+        app: dashboard
+    spec:
+      containers:
+        - name: dashboard
+          image: nginx:1.27-alpine
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dashboard
+  namespace: tenant-b
+spec:
+  selector:
+    app: dashboard
+  ports:
+    - port: 80
+      targetPort: 80
+---
+# Bystander in the SAME namespace as the isolated target, different selector.
+# Proves the generated policy's exclusion is scoped to the "app: dashboard"
+# selector specifically, not the whole tenant-b namespace.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: widget
+  namespace: tenant-b
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: widget
+  template:
+    metadata:
+      labels:
+        app: widget
+    spec:
+      containers:
+        - name: widget
+          image: nginx:1.27-alpine
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: widget
+  namespace: tenant-b
+spec:
+  selector:
+    app: widget
+  ports:
+    - port: 80
+      targetPort: 80
