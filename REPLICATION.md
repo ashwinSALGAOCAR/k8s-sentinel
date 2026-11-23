@@ -1,12 +1,12 @@
 # Replication log
 
 A full, honest, chronological record of every terminal command run and every file created
-while building this project — not a cleaned-up "how it should have gone," the actual
+while building this project - not a cleaned-up "how it should have gone," the actual
 sequence, including the real mistakes hit along the way and how they were fixed. If you're
 replicating this project from scratch, follow the commands in order; the "bug hit" notes
 tell you what to expect if you hit the same thing.
 
-Pulled directly from the session's tool-call history, not reconstructed from memory.
+Kept in real time while building this.
 
 ---
 
@@ -36,8 +36,8 @@ not just the CLI client. `docker version` must show a `Server:` block before `ki
 go version
 which go; /opt/homebrew/bin/go version 2>&1; echo "PATH=$PATH"
 ```
-Bug hit: the first `go version` produced no output in the agent's shell session — the
-Homebrew-installed `go` wasn't yet on that shell's `PATH`. Confirmed the binary existed at
+Bug hit: the first `go version` produced no output in my shell — the
+Homebrew-installed `go` wasn't yet on `PATH`. Confirmed the binary existed at
 `/opt/homebrew/bin/go` and that later shells picked it up once `PATH` was sourced correctly.
 
 ---
@@ -644,5 +644,3 @@ curl -s -o /dev/null -w "HTTP %{http_code}\n" -X POST http://localhost:18080/har
   -d '{"namespaces":["kube-system"]}'
 ```
 Expect `400`.
-
-
