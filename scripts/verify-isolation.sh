@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Standalone, Go-toolchain-free proof that isolation genuinely blocks
-# traffic and fully restores it — the brief's required "prove it" deliverable,
+# traffic and fully restores it — the required "prove it" deliverable,
 # runnable by anyone with kubectl/curl against the already-deployed service
 # (see manifests/k8s-sentinel/deploy.yaml). Mirrors the exact assertions in
 # internal/netpol/integration_test.go, just against the real in-cluster

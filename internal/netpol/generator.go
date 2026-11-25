@@ -47,7 +47,7 @@ type WorkloadRef struct {
 }
 
 // Request is the isolate/clear request body — deliberately named to mirror
-// the brief's own example (`isolate: {a: {...}, b: {...}}`).
+// the example request shape (`isolate: {a: {...}, b: {...}}`).
 type Request struct {
 	A WorkloadRef `json:"a"`
 	B WorkloadRef `json:"b"`
@@ -163,7 +163,7 @@ func allExcept(other WorkloadRef) []networkingv1.NetworkPolicyPeer {
 
 // notInExpressions turns a selector like {"app": "dashboard"} into
 // match expressions meaning "not this." For a single-key selector (the
-// case the brief's own example uses, and the only case our sample
+// case our worked example uses, and the only case our sample
 // workloads exercise) this is exact. For a multi-key selector it's
 // intentionally over-exclusive rather than under-exclusive: a pod sharing
 // even one label key/value with `other` gets treated as "possibly other"

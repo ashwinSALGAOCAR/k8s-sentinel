@@ -22,7 +22,7 @@ cluster it manages.
 
 ---
 
-## Core tasks (from the brief)
+## Core tasks
 
 1. **Network isolation (on demand)** — block traffic between two workloads (defined by
    namespace + label selector) without breaking anything else, and fully restore prior
@@ -52,7 +52,7 @@ No Kubernetes cluster needs to pre-exist — `scripts/setup-cluster.sh` creates 
 
 ## Design decisions and trade-offs
 
-The brief deliberately leaves several choices open — how isolation should behave as pods
+Several choices were deliberately left open — how isolation should behave as pods
 come and go, what counts as "hardened," how state is tracked, which namespaces are
 off-limits, and more. Each one is recorded with its reasoning in **[`DESIGN.md`](./DESIGN.md)**,
 including the trade-off analysis between standard `NetworkPolicy` and Calico-native
@@ -110,13 +110,13 @@ this is just the summary.
   scripts, no Go toolchain required, proving both features end-to-end against the real
   deployed service; both pass reliably on repeated runs
 
-### Phase 7 — Documentation + submission
+### Phase 7 — Documentation
 - [x] [`DESIGN.md`](./DESIGN.md) — every design decision and trade-off, with reasoning
 - [x] [`REPLICATION.md`](./REPLICATION.md) — full command-by-command build log, every
   issue hit and how it was resolved, plus a manual CLI testing walkthrough
-- [ ] Record actual time spent against the stated 4–6 hour core-task budget
-- [ ] Disclose AI-assisted development per the brief's explicit requirement, and be ready
-  to explain/defend every part at interview
+- [x] Actual time spent: ~1 day for AI-assisted scaffolding of the basic skeleton, plus
+  1–2 days understanding the code in depth, exercising edge cases, and refining it.
+- [x] Disclose AI-assisted development used in building this project
 
 ---
 

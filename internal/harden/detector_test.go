@@ -32,7 +32,7 @@ func hardenedContainer(name string) corev1.Container {
 	}
 }
 
-// --- Detect: the four cases the brief's workload-hardening task centers on ---
+// --- Detect: the four cases workload-hardening detection centers on ---
 
 func TestDetect_AlreadyHardened_IsNoOp(t *testing.T) {
 	template := podTemplate(hardenedContainer("app"))
