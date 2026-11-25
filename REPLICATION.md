@@ -229,7 +229,7 @@ kubectl --context kind-k8s-sentinel -n tenant-a get deployment gateway -o jsonpa
 kubectl --context kind-k8s-sentinel -n tenant-a get deployment gateway -o jsonpath='{.spec.template.spec.containers[0].resources}'
 kubectl --context kind-k8s-sentinel -n tenant-a get pods
 ```
-Bug hit (a real, interview-defensible finding, not papered over): applying the baseline to
+Bug hit (a real finding, not papered over): applying the baseline to
 `tenant-a/gateway` (image `nicolaka/netshoot`, no non-root `USER` in its Dockerfile) made the
 new pod fail with `container has runAsNonRoot and image has non-numeric user (root), cannot
 verify user is non-root`:
@@ -490,7 +490,7 @@ chmod +x scripts/verify-hardening.sh && ./scripts/verify-hardening.sh
 
 The two verification scripts (`scripts/verify-isolation.sh`, `scripts/verify-hardening.sh`)
 automate all of this, but here's the same thing broken into individual commands — useful
-for poking at the running service by hand, or for the interview walkthrough.
+for poking at the running service by hand.
 
 **0. Port-forward to the real deployed service** (run first, leave it running in its own terminal):
 ```bash
